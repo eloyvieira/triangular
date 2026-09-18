@@ -6,11 +6,57 @@ from utils import numberFormatPrecision, sorted_orderbook
 
 logger = logging.getLogger("triangular-binance")
 
+ROUTE_LOG_INTERVAL_SECONDS = 2.0
+COLOR_GREEN = "\033[92m"
+COLOR_RED = "\033[91m"
+COLOR_RESET = "\033[0m"
+
 class TriangularStrategy:
     """Analyzes and executes the BBA and BAA triangular arbitrage routes."""
 
     def __init__(self, ctx):
         self.ctx = ctx
+        self._last_route_log_at = {}
+
+    def _log_route_forecast(
+            self,
+            route,
+            base,
+            initial_value,
+            final_value,
+            profit_percentage,
+    ):
+        route_key = f"{route}:{base}"
+        now = time.monotonic()
+
+        last_log_at = self._last_route_log_at.get(route_key, 0.0)
+
+        if now - last_log_at < ROUTE_LOG_INTERVAL_SECONDS:
+            return
+
+        self._last_route_log_at[route_key] = now
+
+        is_profitable = (
+                profit_percentage >= self.ctx.min_porcentagem
+                and not self.ctx.desliga
+        )
+
+        color = COLOR_GREEN if is_profitable else COLOR_RED
+        status = "PROFITABLE" if is_profitable else "BELOW TARGET"
+
+        logger.info(
+            "%s%s %s | initial=%.2f USDT | final=%.2f USDT | "
+            "result=%+.4f%% | target=%.4f%% | %s%s",
+            color,
+            route,
+            base,
+            initial_value,
+            final_value,
+            profit_percentage,
+            self.ctx.min_porcentagem,
+            status,
+            COLOR_RESET,
+        )
 
     def can_emit_opportunity(self, route_key):
         now = time.monotonic()
@@ -215,6 +261,13 @@ class TriangularStrategy:
                 trade_value,
                 final_value,
             )
+            self._log_route_forecast(
+                route="BBA",
+                base=base,
+                initial_value=trade_value,
+                final_value=final_value,
+                profit_percentage=profit_percentage,
+            )
 
             if (
                 profit_percentage < self.ctx.min_porcentagem
@@ -339,6 +392,14 @@ class TriangularStrategy:
             profit_percentage = self._calculate_profit_percentage(
                 trade_value,
                 final_value,
+            )
+
+            self._log_route_forecast(
+                route="BAA",
+                base=base,
+                initial_value=trade_value,
+                final_value=final_value,
+                profit_percentage=profit_percentage,
             )
 
             if (
