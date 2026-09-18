@@ -12,6 +12,7 @@ logger = logging.getLogger("triangular-binance")
 class BinanceWebSocket:
     def __init__(self, ctx):
         self.ctx = ctx
+        self._logged_symbols = set()
 
     def books_are_fresh(self, base):
         now = time.monotonic()
@@ -59,6 +60,24 @@ class BinanceWebSocket:
 
         self.ctx.market_update_id[symbol] = update_id
         self.ctx.market_updated_at[symbol] = time.monotonic()
+        if symbol not in self._logged_symbols:
+            best_bid_price, best_bid_amount = bids[0]
+            best_ask_price, best_ask_amount = asks[0]
+            logger.info(
+                "Order book received: %s | "
+                "bid=%s amount=%s | "
+                "ask=%s amount=%s | "
+                "levels=%d/%d",
+                symbol,
+                best_bid_price,
+                best_bid_amount,
+                best_ask_price,
+                best_ask_amount,
+                len(bids),
+                len(asks),
+            )
+            self._logged_symbols.add(symbol)
+
         if symbol.endswith("USDT") and symbol != "BTCUSDT":
             base = symbol[:-4]
             if self.books_are_fresh(base):
