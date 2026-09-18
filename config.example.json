@@ -24,6 +24,7 @@
     "balance_limit_usdt": 1000,
     "last_order_gain_percent": 0.5,
     "last_order_limit": true,
+    "route_log_interval_seconds": 2,
     "opportunity_cooldown_seconds": 2
   }
 }

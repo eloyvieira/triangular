@@ -6,7 +6,7 @@ from utils import numberFormatPrecision, sorted_orderbook
 
 logger = logging.getLogger("triangular-binance")
 
-ROUTE_LOG_INTERVAL_SECONDS = 10.0
+ROUTE_LOG_INTERVAL_SECONDS = 2.0
 COLOR_GREEN = "\033[92m"
 COLOR_RED = "\033[91m"
 COLOR_RESET = "\033[0m"

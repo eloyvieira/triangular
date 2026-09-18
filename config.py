@@ -38,7 +38,9 @@ def configure_context(ctx, config):
     )
     ctx.balance = float(strategy_config.get("balance_limit_usdt", 1000))
     ctx.lastorder_limit = strategy_config.get("last_order_limit", True) is True
-
+    ctx.ROUTE_LOG_INTERVAL_SECONDS = float(
+        strategy_config.get("route_log_interval_seconds", 2.0)
+    )
     if ctx.WS_DEPTH not in (5, 10, 20):
         raise ValueError("binance_websocket.depth It needs to be 5, 10, or 20.")
 
