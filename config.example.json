@@ -1,0 +1,29 @@
+{
+  "mysql": {
+    "host": "127.0.0.1",
+    "user": "SEU_USUARIO",
+    "passwd": "SUA_SENHA",
+    "db": "SUA_BASE"
+  },
+  "robot_private_ip": "127.0.0.1",
+  "log_level": "INFO",
+  "binance_websocket": {
+    "url": "wss://stream.binance.com:9443/stream",
+    "depth": 20,
+    "update_speed": "100ms",
+    "stale_seconds": 3,
+    "streams_per_connection": 200
+  },
+  "triangular": {
+    "execute_orders": false,
+    "book_level": 5,
+    "taker_fee_percent": 0.1,
+    "min_profit_percent": 1.0,
+    "min_amount_usdt": 100,
+    "max_amount_usdt": 150,
+    "balance_limit_usdt": 1000,
+    "last_order_gain_percent": 0.5,
+    "last_order_limit": true,
+    "opportunity_cooldown_seconds": 2
+  }
+}

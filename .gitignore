@@ -1,0 +1,93 @@
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Local configuration containing credentials
+config.json
+config.local.json
+config.production.json
+config.*.json
+!config.example.json
+
+# Credentials and private keys
+credentials/
+secrets/
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Build and packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Logs and runtime files
+logs/
+*.log
+*.pid
+*.pid.lock
+*.out
+*.err
+
+# Database dumps and backups
+*.dump
+*.sql.gz
+*.sql.zip
+backups/
+database/backups/
+database/dumps/
+
+# Ignore SQL files containing real data
+binance_orders*.sql
+orders_wave_swing*.sql
+trader_daily_profit_history*.sql
+
+# Local databases
+*.sqlite
+*.sqlite3
+*.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# IDEs
+.idea/
+.vscode/
+*.code-workspace
+
+# Operating systems
+.DS_Store
+Thumbs.db
+
+# Docker secrets and local overrides
+docker-compose.override.yml
+docker-compose.local.yml
+docker-secrets/
