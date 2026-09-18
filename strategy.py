@@ -6,7 +6,7 @@ from utils import numberFormatPrecision, sorted_orderbook
 
 logger = logging.getLogger("triangular-binance")
 
-ROUTE_LOG_INTERVAL_SECONDS = 2.0
+ROUTE_LOG_INTERVAL_SECONDS = 10.0
 COLOR_GREEN = "\033[92m"
 COLOR_RED = "\033[91m"
 COLOR_RESET = "\033[0m"
@@ -376,7 +376,7 @@ class TriangularStrategy:
             value2 = float(value1) * float(price2)
             value2 = numberFormatPrecision(
                 value2,
-                self.ctx.info[market2]["dec_precision"],
+                self.ctx.info[market3]["decimal"],
             )
 
             price3, price_log = self._get_execution_price(
