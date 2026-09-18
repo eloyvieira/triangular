@@ -128,12 +128,33 @@ def main():
             (robot[3], "bot_binance_v20", "USDT"),
         )
         balances_history = cursor.fetchone()
-        if balances_history:
-            ctx.desliga = False
-            if float(balances_history[0]) < 10:
-                ctx.desliga = True
-        else:
+
+        if not balances_history:
             ctx.desliga = True
+            logger.error(
+                "Robot disabled: no USDT balance history found for robot ID %s",
+                robot[3],
+            )
+        elif float(balances_history[0]) < 10:
+            ctx.desliga = True
+            logger.error(
+                "Robot disabled: database balance is below 10 USDT: %.2f",
+                float(balances_history[0]),
+            )
+        else:
+            ctx.desliga = False
+            logger.info(
+                "Database balance validated: %.2f USDT",
+                float(balances_history[0]),
+            )
+
+        if ctx.balance < ctx.minamount:
+            logger.error(
+                "Robot disabled: balance_limit_usdt %.2f is below "
+                "min_amount_usdt %.2f",
+                ctx.balance,
+                ctx.minamount,
+            )
 
         if ctx.balance >= ctx.minamount:
             if ctx.balance < ctx.maxamount:
